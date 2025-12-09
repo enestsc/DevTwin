@@ -61,7 +61,7 @@ On startup, the backend will:
 
 ## 🏗 Architecture
 
-<pre>
+```mermaid
     graph TD
     %% --- Renk ve Stil Tanımları (Dark Mode Uyumlu) ---
     classDef user fill:#212121,stroke:#fff,stroke-width:2px,color:#fff;
@@ -116,4 +116,4 @@ On startup, the backend will:
     %% --- Link Stilleri (Okların Renkleri) ---
     linkStyle 9,10,11 stroke:#f57c00,stroke-width:2px,stroke-dasharray: 5 5;
     linkStyle 6,7,8 stroke:#7b1fa2,stroke-width:2px;
-</pre>
+```

@@ -71,7 +71,7 @@ On startup, the backend will:
     classDef ai fill:#7b1fa2,stroke:#4a148c,stroke-width:2px,color:#fff;
     classDef external fill:#546e7a,stroke:#37474f,stroke-width:2px,stroke-dasharray: 5 5,color:#fff;
 
-    %% --- Düğümler (Kutucuklar - Metinler Tırnak İçine Alındı) ---
+    %% --- Düğümler (Kutucuklar - Çift Tırnak İçinde) ---
     User((👤 User / Recruiter)):::user
     
     subgraph "Docker Container: Frontend"
@@ -95,8 +95,8 @@ On startup, the backend will:
         PDF["📄 CV.pdf <br/> <i>Local File</i>"]:::external
     end
 
-    %% --- Bağlantılar: Sohbet Akışı (Düz Çizgi) ---
-    User <-->|1. Type Message| UI
+    %% --- Bağlantılar: Sohbet Akışı ---
+    User <-->|"1. Type Message"| UI
     UI <-->|"2. POST /chat (JSON)"| API
     API <-->|"3. Invoke Chain"| Orchestrator
     
@@ -108,12 +108,15 @@ On startup, the backend will:
     Orchestrator -->|"7. Prompt + Context"| Groq
     Groq -->|"8. Generated Answer"| Orchestrator
     
-    %% --- Bağlantılar: Veri Yükleme Akışı (Kesik Çizgi) ---
+    %% --- Bağlantılar: Veri Yükleme Akışı ---
     GitHub -.->|"Fetch Repos"| Ingest
     PDF -.->|"Parse Text"| Ingest
     Ingest -.->|"Embed & Upsert"| Chroma
 
-    %% --- Link Stilleri (Okların Renkleri) ---
-    linkStyle 9,10,11 stroke:#f57c00,stroke-width:2px,stroke-dasharray: 5 5;
-    linkStyle 6,7,8 stroke:#7b1fa2,stroke-width:2px;
+    %% --- Stil Ayarları (İndeksler Düzeltildi: 0-10 arası) ---
+    %% Turuncu (Ingestion) Linkler: 8, 9, 10
+    linkStyle 8,9,10 stroke:#f57c00,stroke-width:2px,stroke-dasharray: 5 5;
+    
+    %% Mor (AI) Linkler: 6, 7
+    linkStyle 6,7 stroke:#7b1fa2,stroke-width:2px;
 ```

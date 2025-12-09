@@ -62,16 +62,16 @@ On startup, the backend will:
 ## 🏗 Architecture
 
 graph TD
-    %% --- Styles ---
-    classDef user fill:#f9f9f9,stroke:#333,stroke-width:2px,color:black;
-    classDef frontend fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:black;
-    classDef backend fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:black;
-    classDef db fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:black;
-    classDef ai fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:black;
-    classDef external fill:#eceff1,stroke:#455a64,stroke-width:2px,stroke-dasharray: 5 5,color:black;
+    %% --- Renk ve Stil Tanımları ---
+    classDef user fill:#212121,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef frontend fill:#0288d1,stroke:#01579b,stroke-width:2px,color:#fff;
+    classDef backend fill:#2e7d32,stroke:#1b5e20,stroke-width:2px,color:#fff;
+    classDef db fill:#f57c00,stroke:#e65100,stroke-width:2px,color:#fff;
+    classDef ai fill:#7b1fa2,stroke:#4a148c,stroke-width:2px,color:#fff;
+    classDef external fill:#455a64,stroke:#263238,stroke-width:2px,stroke-dasharray: 5 5,color:#fff;
 
-    %% --- Nodes ---
-    User((👤 Recruiter / User)):::user
+    %% --- Düğümler (Nodes) ---
+    User((👤 User / Recruiter)):::user
     
     subgraph "Docker Container: Frontend"
         UI[💻 Next.js UI <br/> <i>(Chat Interface)</i>]:::frontend
@@ -83,35 +83,34 @@ graph TD
         Ingest[🐍 Ingestion Script <br/> <i>(Runs on Startup)</i>]:::backend
     end
 
-    subgraph "Local Storage (Volumes)"
+    subgraph "Local Storage (Persistent Volumes)"
         Chroma[(🔹 ChromaDB <br/> <i>Vector Store</i>)]:::db
         SQLite[(🗄️ SQLite <br/> <i>Chat History</i>)]:::db
     end
 
     subgraph "External Cloud Services"
         Groq[⚡ Groq LPU <br/> <i>Llama 3.3 Model</i>]:::ai
-        GitHub[Octocat <br/> <i>GitHub API</i>]:::external
+        GitHub[🐙 GitHub API <br/> <i>Public Repos</i>]:::external
         PDF[📄 CV.pdf <br/> <i>Local File</i>]:::external
     end
 
-    %% --- Connections: Chat Flow ---
-    User <-->|Type Message| UI
-    UI <-->|POST /chat (JSON)| API
-    API <-->|Invoke Chain| Orchestrator
+    %% --- Bağlantılar: Sohbet Akışı (Düz Çizgi) ---
+    User <-->|1. Type Message| UI
+    UI <-->|2. POST /chat (JSON)| API
+    API <-->|3. Invoke Chain| Orchestrator
     
-    Orchestrator -->|1. Similarity Search| Chroma
-    Chroma -->|2. Retrieved Chunks| Orchestrator
+    Orchestrator -->|4. Similarity Search| Chroma
+    Chroma -->|5. Retrieved Context| Orchestrator
     
-    Orchestrator -->|3. Read/Write| SQLite
+    Orchestrator -->|6. Read/Write| SQLite
     
-    Orchestrator -->|4. Prompt + Context| Groq
-    Groq -->|5. Generated Answer| Orchestrator
+    Orchestrator -->|7. Prompt + Context| Groq
+    Groq -->|8. Generated Answer| Orchestrator
     
-    %% --- Connections: Ingestion Flow ---
-    GitHub -->|Fetch Repos| Ingest
-    PDF -->|Parse Text| Ingest
-    Ingest -->|Embed & Upsert| Chroma
+    %% --- Bağlantılar: Veri Yükleme Akışı (Kesik Çizgi) ---
+    GitHub -.->|Fetch Repos| Ingest
+    PDF -.->|Parse Text| Ingest
+    Ingest -.->|Embed & Upsert| Chroma
 
-    %% --- Link Styling ---
-    linkStyle 6,7,9,10,11 stroke:#7b1fa2,stroke-width:2px;
-    linkStyle 12,13,14 stroke:#ef6c00,stroke-width:2px,stroke-dasharray: 5 5;
+    %% --- Link Stilleri ---
+    linkStyle 9,10,11 stroke:#f57c00,stroke-width:2px,stroke-dasharray: 5 5;
